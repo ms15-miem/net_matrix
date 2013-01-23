@@ -1,0 +1,18 @@
+Для удобного ввода-вывода матриц обеспечено взаимодействие с системой Matlab:
+в файле mainwindow.cpp реализованы функции getMatrixFromFile  и saveMatrixToFile, обеспечивающие импорт и экспорт данных в текстовый файл в совместимом формате.
+Команды Matlab:
+dlmwrite('matrix.txt', somematrix) — экспорт из Matlab в файл
+dlmread('matrix.txt'') — импорт из файла в Matlab
+
+
+---------------------------------------------
+
+Matrix input-output or generation is more convenient using Matlab integration. There are implemented getMatrixFromFile and saveMatrixToFile functions, providing import and export data to a text file in a compatible format.
+
+Matlab commands:
+dlmwrite ('matrix.txt', somematrix) - Export to a file from Matlab
+dlmread ('matrix.txt'') - Import from a file in Matlab
+
+Implemented functions (mainwindow.cpp):
+getMatrixFromFile - read Matlab-compatible file
+saveMatrixToFile - write Matlab-compatible file
