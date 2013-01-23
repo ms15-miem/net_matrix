@@ -16,3 +16,8 @@ SOURCES += main.cpp MyServer.cpp ../servclient.cpp \
     tester.cpp
 
 QT += network
+
+
+# aaaaaaaaaaaa
+
+# bbbbbbbbbbbbbbb
