@@ -28,3 +28,5 @@ QT += network
 
 
 #papram
+
+#adadada
