@@ -2,7 +2,7 @@
 #include "mainwindow.h"
 #include "tester.h"
 
-
+//Конструктор
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent)
 {
