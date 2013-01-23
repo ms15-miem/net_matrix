@@ -5,7 +5,7 @@
 #include <QtGui>
 #include <QVector>
 #include "MyServer.h"
-//Главное окно
+//Главное окно программы
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
