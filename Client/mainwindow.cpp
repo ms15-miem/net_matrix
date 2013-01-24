@@ -1,7 +1,7 @@
 #include "mainwindow.h"
 #include "MyClient.h"
 
-
+//Комментарий
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent)
 {
