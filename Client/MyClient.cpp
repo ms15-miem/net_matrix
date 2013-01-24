@@ -25,19 +25,18 @@ void MyClient::readedCom(QTcpSocket* socket,QDataStream &in, command com)
     if (com == MULTIPLY_REQUEST) {
         MultiplyRequst req;
         in >> req;
-
-        qint64 res = 0;
-
-        for (qint64 k = 0; k < a.count(); k++) {
-            res += a[req.i][k]*b[k][req.j];
-        }
-
         MultiplyRespone resp;
-        resp.i = req.i;
-        resp.j =req.j;
-        resp.result = res;
-        if(resp.i>1000||resp.j>1000)
-            qDebug()<<"HALT";
+        qint64 num = req.count();
+        for(qint64 i = 0; i<num; i++)
+        {
+            qint64 res = 0;
+
+            for (qint64 k = 0; k < b.count(); k++) {
+                res += a[req[i].first][k]*b[k][req[i].second];
+            }
+
+            resp.add(req[i].first, req[i].second, res);
+        }
         sendToClient(socket, resp, MULTIPLY_REQUEST);
     }
     else if (com == MULTIPLY_INIT) {
