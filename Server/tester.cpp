@@ -1,5 +1,4 @@
 #include "tester.h"
-#include <ctime>
 
 Tester::Tester(uint cycles, uint N1, uint N2, uint N3, MyServer *myServer, QString fileName, QObject *parent) :
     QObject(parent), N1(N1), N2(N2), N3(N3), cycles(cycles), myServer(myServer), fileName(fileName)
@@ -30,7 +29,7 @@ void Tester::slotParallelIterationDone()
 
         uint seriesTimeMsec = t1.msecsTo(t2);
 
-        stream << QTime::currentTime().toString() << ": cycles: " << cycles << " A[N1*N2]*B[N2*N3] N1 = " << N1 << " N2 = " << N2 << " N3 = " << N3 << endl;
+        stream << QTime::currentTime().toString() << " " << QDate::currentDate().toString() << ": cycles: " << cycles << " A[N1*N2]*B[N2*N3] N1 = " << N1 << " N2 = " << N2 << " N3 = " << N3 << endl;
         stream << "series time(msec): " << seriesTimeMsec << " parallel time(msec): " << parallelTimeMsec << " computers: " << myServer->getClients()->count() << endl << endl;
 
         emit successfulDone();
@@ -47,7 +46,7 @@ QVector<QVector<qint64> > Tester::init_matrix(uint n, uint m)
     for(uint i = 0; i < n; i++) {
         row.clear();
         for(uint j = 0; j < m; j++) {
-            row << rand() % 1000; // в интервале от 0 до 999
+            row << rand() % 100; // в интервале от 0 до 99
         }
         res << row;
     }

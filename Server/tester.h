@@ -9,6 +9,7 @@
 #include <iostream>
 #include <QFile>
 #include "MyServer.h"
+#include <ctime>
 
 using namespace std;
 
