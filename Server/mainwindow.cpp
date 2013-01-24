@@ -7,7 +7,7 @@ MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent)
 {
     server = new MyServer(2323,this);
-    connect(server, SIGNAL(endMultiply(QVector<QVector<int> >&)), this, SLOT(resultImpl(QVector<QVector<int> >&)));
+    connect(server, SIGNAL(endMultiply(QVector<QVector<qint64> >&)), this, SLOT(resultImpl(QVector<QVector<qint64> >&));
     connect(server, SIGNAL(clientsCountChange(qint64)), this, SLOT(clientsCountChange(qint64)));
     connect(server, SIGNAL(done(qreal)), this, SLOT(doneImpl(qreal)));
 
