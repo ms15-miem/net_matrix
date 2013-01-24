@@ -2,7 +2,7 @@
 
 QDataStream & operator<< (QDataStream& stream, const EmptyClass&){return stream;}
 QDataStream & operator>> (QDataStream& stream, EmptyClass&){return stream;}
-
+/*
 QDataStream & operator<< (QDataStream& stream, const MultiplyRequst& p)
 {
     return stream << p.i << p.j;
@@ -12,16 +12,17 @@ QDataStream & operator>> (QDataStream& stream, MultiplyRequst& p)
 {
     return stream >> p.i >> p.j;
 }
-
-QDataStream & operator<< (QDataStream& stream, const MultiplyRespone& p)
+*/
+QDataStream & operator<< (QDataStream& stream, const MultiplyResult& p)
 {
     return stream << p.i << p.j << p.result;
 }
 
-QDataStream & operator>> (QDataStream& stream, MultiplyRespone& p)
+QDataStream & operator>> (QDataStream& stream, MultiplyResult& p)
 {
     return stream >> p.i >> p.j >> p.result;
 }
+
 
 QDataStream & operator<< (QDataStream& stream, const MultiplyInit& p)
 {
@@ -62,9 +63,28 @@ void ServClient::slotReadyRead()
 }
 
 ServClient::ServClient(QObject *o):QObject(o),m_nNextBlockSize(0) {}
-
+/*
 MultiplyRequst::MultiplyRequst(qint64 _i, qint64 _j)
 {
     i = _i;
     j = _j;
+}
+*/
+
+void MultiplyRequst::add(qint64 _i, qint64 _j)
+{
+    QPair<qint64,qint64> p(_i,_j);
+    this->append(p);
+}
+
+
+
+
+void MultiplyRespone::add(qint64 i, qint64 j, qint64 result)
+{
+    MultiplyResult r;
+    r.i = i;
+    r.j = j;
+    r.result = result;
+    this->append(r);
 }

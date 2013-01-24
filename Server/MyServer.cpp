@@ -49,9 +49,11 @@ void MyServer::getInit(MultiplyInit &Init)
     idle = false;
 
     QTcpSocket* pClientSocket = m_ptcpServer->nextPendingConnection();
+    MultiplyRequst req;
 
 
     clients << pClientSocket;
+    clientRequests<<req;
     emit clientsCountChange(clients.size());
 
     connect(pClientSocket, SIGNAL(readyRead()),
@@ -73,7 +75,10 @@ void MyServer::readedCom(QTcpSocket* pClientSocket,QDataStream &in, command com)
     if (com == MULTIPLY_REQUEST) {
         MultiplyRespone resp;
         in >> resp;
-        multiplyResult[resp.i][resp.j] = resp.result;
+        for(qint64 i=0; i<resp.count(); i++)
+        {
+            multiplyResult[resp[i].i][resp[i].j] = resp[i].result;
+        }
 
         countResponses++;
         emit done(qreal(countResponses)/countTotalRequests * 100);
@@ -123,20 +128,23 @@ void MyServer::startMultiply()
 
     //sending requests, w|o counting disconnected
     qint64 rows = init.a.size(), cols = init.b[0].size();
-    countTotalRequests = rows * cols;
+    countTotalRequests = clients.count();
 
-    MultiplyRequst curReq;
     nextReceiver = 0;
 
     for (qint64 ai = 0; ai < rows; ai++)
       for (qint64 bj = 0; bj < cols; bj++)
       {
-          curReq = MultiplyRequst(ai, bj);
           if (!clients.isEmpty())
           {
-              sendToClient(clients[nextReceiver], curReq, MULTIPLY_REQUEST);
+              clientRequests[nextReceiver].add(ai,bj);
               nextReceiver = ++nextReceiver % clientsCount;
           }
       }
+    for(qint64 i = 0; i<clientsCount; i++)
+    {
+        sendToClient(clients[i], clientRequests[i],MULTIPLY_REQUEST);
+        clientRequests[i].clear();
+    }
 
 }

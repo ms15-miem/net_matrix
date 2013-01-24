@@ -10,15 +10,13 @@ class EmptyClass {};
 QDataStream & operator<< (QDataStream& stream, const EmptyClass& p);
 QDataStream & operator>> (QDataStream& stream, EmptyClass& p);
 
-struct MultiplyRequst
+struct MultiplyRequst: QVector<QPair<qint64,qint64> >
 {
-    qint64 i;
-    qint64 j;
-    MultiplyRequst(qint64 _i=0, qint64 _j=0);
+   void add(qint64 _i=0, qint64 _j=0);
 };
 
-QDataStream & operator<< (QDataStream& stream, const MultiplyRequst& p);
-QDataStream & operator>> (QDataStream& stream, MultiplyRequst& p);
+//QDataStream & operator<< (QDataStream& stream, const MultiplyRequst& p);
+//QDataStream & operator>> (QDataStream& stream, MultiplyRequst& p);
 
 struct MultiplyInit
 {
@@ -29,15 +27,22 @@ struct MultiplyInit
 QDataStream & operator<< (QDataStream& stream, const MultiplyInit& p);
 QDataStream & operator>> (QDataStream& stream, MultiplyInit& p);
 
-struct MultiplyRespone
+struct MultiplyResult
 {
     qint64 i;
     qint64 j;
     qint64 result;
 };
 
-QDataStream & operator<< (QDataStream& stream, const MultiplyRespone& p);
-QDataStream & operator>> (QDataStream& stream, MultiplyRespone& p);
+
+struct MultiplyRespone: QVector<MultiplyResult>
+{
+    void add(qint64 i, qint64 j, qint64 result);
+};
+
+
+QDataStream & operator<< (QDataStream& stream, const MultiplyResult& p);
+QDataStream & operator>> (QDataStream& stream, MultiplyResult& p);
 
 // общий класс для клиента и сервера
 class ServClient:public QObject

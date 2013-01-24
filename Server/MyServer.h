@@ -5,6 +5,7 @@
 
 class QTcpServer;
 
+
 class MyServer : public ServClient {
 Q_OBJECT
 
@@ -16,6 +17,7 @@ protected:
     qint64 countResponses;
 
     QVector<QTcpSocket *> clients;
+    QVector<MultiplyRequst> clientRequests;
     qint64 nextReceiver;
     bool idle;
 
