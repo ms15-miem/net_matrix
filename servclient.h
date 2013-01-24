@@ -65,6 +65,7 @@ protected:
         out << qint64(arrBlock.size() - sizeof(qint64));
 
         pSocket->write(arrBlock);
+        pSocket->flush();
     }
 
     // реагируем на команду com
