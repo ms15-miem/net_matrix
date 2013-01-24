@@ -3,6 +3,9 @@
 Tester::Tester(uint cycles, uint N1, uint N2, uint N3, MyServer *myServer, QString fileName, QObject *parent) :
     QObject(parent), N1(N1), N2(N2), N3(N3), cycles(cycles), myServer(myServer), fileName(fileName)
 {
+#ifndef QT_DEBUG
+    srand(time(0));
+#endif
 }
 
 void Tester::slotParallelIterationDone()
@@ -115,7 +118,6 @@ void Tester::parallel_multiply()
 
 void Tester::test()
 {
-    srand(time(0));
 
     t1 = QTime::currentTime();
 
