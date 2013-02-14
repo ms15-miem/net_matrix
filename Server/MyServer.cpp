@@ -138,7 +138,7 @@ void MyServer::startMultiply()
           if (!clients.isEmpty())
           {
               clientRequests[nextReceiver].add(ai,bj);
-              nextReceiver = ++nextReceiver % clientsCount;
+              nextReceiver = (nextReceiver+1) % clientsCount;
           }
       }
     for(qint64 i = 0; i<clientsCount; i++)
