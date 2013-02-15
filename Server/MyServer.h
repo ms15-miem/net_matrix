@@ -7,7 +7,7 @@ class QTcpServer;
 
 
 class MyServer : public ServClient {
-Q_OBJECT
+    Q_OBJECT
 
 protected:
     QTcpServer* m_ptcpServer;
@@ -27,22 +27,22 @@ protected:
 
 public:
     MyServer(qint64 nPort, QObject* pwgt = 0);
-    void getInit(MultiplyInit& Init);
     ~MyServer();
 
     const QVector<QTcpSocket *>* getClients() const;
 
 protected slots:
     virtual void slotNewConnection();
-            void userDisconnected();
+    void userDisconnected();
 
-public:
-            void startMultiply();
+public slots:
+    void startMultiply();
+    void getInit(MultiplyInit Init);
 
 
 signals:
-            void endMultiply(QVector<QVector<qint64> > &res);
-            void clientsCountChange(qint64 count);
-            void done(qreal percent);
+    void endMultiply(QVector<QVector<qint64> > res);
+    void clientsCountChange(qint64 count);
+    void done(qreal percent);
 };
 #endif  //_MyServer_h_

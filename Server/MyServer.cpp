@@ -19,7 +19,7 @@ MyServer::MyServer(qint64 nPort, QObject* pwgt /*=0*/) : ServClient(pwgt),
 }
 
 
-void MyServer::getInit(MultiplyInit &Init)
+void MyServer::getInit(MultiplyInit Init)
 {
     qint64 i;
     init.a.clear();

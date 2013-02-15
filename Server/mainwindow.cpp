@@ -1,6 +1,6 @@
 #include <QDebug>
 #include "mainwindow.h"
-#include "tester.h"
+#include "testthread.h"
 
 //Конструктор
 MainWindow::MainWindow(QWidget *parent) :
@@ -605,13 +605,16 @@ void MainWindow::testRun()
     qint64 num = testEdit->text().toInt(&ok);
     if(!ok)
         num = 200;
-    Tester *tester = new Tester(1, num, num, num, server, "tests.txt");
-    connect(tester, SIGNAL(successfulDone()), tester, SLOT(deleteLater()));
-    connect(tester, SIGNAL(errorOpenFile()), tester, SLOT(deleteLater()));
+
+    TestThread *tester = new TestThread(num, server);
+
     connect(tester, SIGNAL(successfulDone()), this, SLOT(testFinishImpl()));
     connect(tester, SIGNAL(errorOpenFile()), this, SLOT(testFinishImpl()));
 
-    tester->test();
+    connect(tester, SIGNAL(successfulDone()), tester, SLOT(deleteLater()));
+    connect(tester, SIGNAL(errorOpenFile()), tester, SLOT(deleteLater()));
+
+    tester->start();
 }
 
 void MainWindow::testFinishImpl()

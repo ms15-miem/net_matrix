@@ -66,8 +66,9 @@ public:
 signals:
     void successfulDone();
     void errorOpenFile();
+
 protected slots:
-    void slotParallelIterationDone();
+    void slotParallelIterationDone(QVector<QVector<qint64> >);
 };
 
 #endif // TESTER_H

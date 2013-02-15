@@ -10,10 +10,12 @@ INCLUDEPATH += .
 # Input
 HEADERS += MyServer.h ../servclient.h ../commands.h \
     mainwindow.h \
-    tester.h
+    tester.h \
+    testthread.h
 SOURCES += main.cpp MyServer.cpp ../servclient.cpp \
     mainwindow.cpp \
-    tester.cpp
+    tester.cpp \
+    testthread.cpp
 
 QT += network
 
