@@ -1,15 +1,15 @@
 #include <QDebug>
 #include "mainwindow.h"
-#include "testthread.h"
+#include "tester.h"
 
 //Конструктор
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent)
 {
     server = new MyServer(2323,this);
-//    connect(server, SIGNAL(endMultiply(QVector<QVector<qint64> >&)), this, SLOT(resultImpl(QVector<QVector<qint64> >&)));
+    connect(server, SIGNAL(endMultiply(QVector<QVector<qint64> >)), this, SLOT(resultImpl(QVector<QVector<qint64> >)));
     connect(server, SIGNAL(clientsCountChange(qint64)), this, SLOT(clientsCountChange(qint64)));
-//    connect(server, SIGNAL(done(qreal)), this, SLOT(doneImpl(qreal)));
+    connect(server, SIGNAL(done(qreal)), this, SLOT(doneImpl(qreal)));
 
     bar = this->statusBar();
     clientsLabel = new QLabel("Clients: 0");
@@ -426,7 +426,7 @@ void MainWindow::saveMatrixToFile(QVector<QVector<qint64 > > FromObj,QString ToF
    return;
 }
 
-void MainWindow::resultImpl(QVector<QVector<qint64 > > &mat)
+void MainWindow::resultImpl(QVector<QVector<qint64> > mat)
 {
     bool ok = true;
     saveMatrixToFile(mat, outputEdit->text(), &ok);
@@ -600,25 +600,48 @@ void MainWindow::outputBrowseImpl()
 
 void MainWindow::testRun()
 {
-    testButton->setEnabled(false);
+    if (server->getClients()->size() <= 0) {
+        return;
+    }
+
+//    testButton->setEnabled(false);
+    // чтобы не нажимали другие кнопки
+    this->setEnabled(false);
+
+    disconnect(server, SIGNAL(endMultiply(QVector<QVector<qint64> >)), this, SLOT(resultImpl(QVector<QVector<qint64> >)));
+    disconnect(server, SIGNAL(done(qreal)), this, SLOT(doneImpl(qreal)));
+
+
+    // wtf?
     bool ok = true;
     qint64 num = testEdit->text().toInt(&ok);
     if(!ok)
         num = 200;
 
-    TestThread *tester = new TestThread(num, server);
 
-    connect(tester, SIGNAL(successfulDone()), this, SLOT(testFinishImpl()));
-    connect(tester, SIGNAL(errorOpenFile()), this, SLOT(testFinishImpl()));
+    QThread *thread = new QThread(this);
 
-    connect(tester, SIGNAL(successfulDone()), tester, SLOT(deleteLater()));
-    connect(tester, SIGNAL(errorOpenFile()), tester, SLOT(deleteLater()));
+    Tester *tester = new Tester(1, num, num, num, server, "tests.txt");
 
-    tester->start();
+    connect(thread, SIGNAL(finished()), tester, SLOT(deleteLater()));
+    connect(thread, SIGNAL(finished()), this, SLOT(testFinishImpl()));
+    connect(thread, SIGNAL(finished()), thread, SLOT(deleteLater()));
+
+    connect(thread, SIGNAL(started()), tester, SLOT(test()));
+    connect(tester, SIGNAL(errorOpenFile()), thread, SLOT(quit()));
+    connect(tester, SIGNAL(successfulDone()), thread, SLOT(quit()));
+
+    tester->moveToThread(thread);
+    thread->start();
+
 }
 
 void MainWindow::testFinishImpl()
 {
-    testButton->setEnabled(true);
+    this->setEnabled(true);
+//    testButton->setEnabled(true);
+
+    connect(server, SIGNAL(endMultiply(QVector<QVector<qint64> >)), this, SLOT(resultImpl(QVector<QVector<qint64> >)));
+    connect(server, SIGNAL(done(qreal)), this, SLOT(doneImpl(qreal)));
 }
 

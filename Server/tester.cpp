@@ -15,10 +15,12 @@ void Tester::slotParallelIterationDone(QVector<QVector<qint64> >)
     static uint countPassedCycles = 0;
     countPassedCycles++;
 
-    if (countPassedCycles == cycles) {
-        countPassedCycles = 0;
+    if (countPassedCycles >= cycles) {
 
         QTime t3 = QTime::currentTime();
+
+        countPassedCycles = 0;
+        disconnect(myServer, SIGNAL(endMultiply(QVector<QVector<qint64> >)), this, SLOT(slotParallelIterationDone(QVector<QVector<qint64> >)));
 
         QFile file(fileName);
         if (!file.open(QIODevice::WriteOnly | QIODevice::Append | QIODevice::Text)) {
@@ -114,20 +116,29 @@ void Tester::parallel_multiply()
     init.a = a;
     init.b = b;
 
-    //    myServer->getInit(init);
+
+    qRegisterMetaType<QVector<QVector<qint64> > >("QVector<QVector<qint64> >");
+
+
+    connect(myServer, SIGNAL(endMultiply(QVector<QVector<qint64> >)), this, SLOT(slotParallelIterationDone(QVector<QVector<qint64> >)), Qt::QueuedConnection);
+
+
+//        myServer->getInit(init);
 
     qRegisterMetaType<MultiplyInit>("MultiplyInit");
 
     QMetaObject::invokeMethod(myServer, "getInit", Qt::QueuedConnection, Q_ARG(MultiplyInit, init));
 
-//    myServer->startMultiply();
-    if (QMetaObject::invokeMethod(myServer, "startMultiply", Qt::QueuedConnection)) {
-        int i = 0;
-    }
+//        myServer->startMultiply();
+    QMetaObject::invokeMethod(myServer, "startMultiply", Qt::QueuedConnection);
+
 }
 
 void Tester::test()
 {
+    if (cycles == 0) return;
+
+
 
     t1 = QTime::currentTime();
 

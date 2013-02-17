@@ -34,14 +34,6 @@ class Tester : public QObject
     // время после параллельного умножения
     QTime t3;
 
-    /**
-     * @brief init - инициализация матрицы
-     * @param n - число строк
-     * @param m - число столбцов
-     * @return матрица
-     */
-    QVector<QVector<qint64> > init_matrix(uint n, uint m);
-
     // последовательное умножение матриц
     void series_multiply();
 
@@ -51,14 +43,13 @@ public:
 
        static void print_matrix(QVector<QVector<qint64> > a);
 
-    /**
-     * @brief test - сравнение последовательного и параллельного алгоритмов на рандомных матрицах
-     * @param N1 - высота первой матрицы
-     * @param N2 - ширина первой матрицы, высота второй матрицы
-     * @param N3 - ширина второй матрицы
-     * @param cycles
-     */
-    void test();
+       /**
+        * @brief init - инициализация матрицы
+        * @param n - число строк
+        * @param m - число столбцов
+        * @return матрица
+        */
+       static QVector<QVector<qint64> > init_matrix(uint n, uint m);
 
 public:
     explicit Tester(uint cycles, uint N1, uint N2, uint N3, MyServer *myServer, QString fileName, QObject *parent = 0);
@@ -67,7 +58,17 @@ signals:
     void successfulDone();
     void errorOpenFile();
 
-protected slots:
+public slots:
+    /**
+     * @brief test - сравнение последовательного и параллельного алгоритмов на рандомных матрицах
+     * @param N1 - высота первой матрицы
+     * @param N2 - ширина первой матрицы, высота второй матрицы
+     * @param N3 - ширина второй матрицы
+     * @param cycles - число однотипных тестов
+     */
+    void test();
+
+public slots:
     void slotParallelIterationDone(QVector<QVector<qint64> >);
 };
 

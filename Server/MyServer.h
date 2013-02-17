@@ -36,8 +36,8 @@ protected slots:
     void userDisconnected();
 
 public slots:
-    void startMultiply();
-    void getInit(MultiplyInit Init);
+    Q_INVOKABLE void startMultiply();
+    Q_INVOKABLE void getInit(MultiplyInit Init);
 
 
 signals:

@@ -70,7 +70,7 @@ public slots:
     void secondXImpl(QString str);
     void secondYImpl(QString str);
     void multiplyImpl();
-    void resultImpl(QVector<QVector<qint64 > > &mat);
+    void resultImpl(QVector<QVector<qint64 > > mat);
     void clientsCountChange(qint64 count);
     void doneImpl(qreal done);
     void outputBrowseImpl();
